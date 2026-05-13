@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #000;
+  color: white;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+/* ─────────────────────────────────────────────
+   MESH BACKGROUND — Pure CSS animations
+   These run on the GPU compositor thread so
+   JavaScript is completely uninvolved. Much
+   cheaper than framer-motion JS animations.
+───────────────────────────────────────────── */
+
+.mesh-bg {
+  background: radial-gradient(ellipse at 50% 0%, #111 0%, #000 80%);
+  contain: paint; /* stops layout recalcs spilling out */
+}
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  will-change: transform; /* hint browser to promote to its own GPU layer */
+}
+
+.mesh-blob--orange {
+  width: 60vw;
+  height: 60vw;
+  top: -20%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.25) 0%, transparent 70%);
+  animation: float-orange 22s ease-in-out infinite;
+}
+
+.mesh-blob--purple {
+  width: 55vw;
+  height: 55vw;
+  top: 30%;
+  left: 55%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
+  animation: float-purple 28s ease-in-out infinite;
+}
+
+.mesh-blob--blue {
+  width: 45vw;
+  height: 45vw;
+  top: 60%;
+  left: 20%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+  animation: float-blue 18s ease-in-out infinite;
+}
+
+.mesh-blob--rose {
+  width: 40vw;
+  height: 40vw;
+  top: -10%;
+  left: 70%;
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.12) 0%, transparent 70%);
+  animation: float-rose 25s ease-in-out infinite;
+}
+
+.mesh-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@keyframes float-orange {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(15vw, 15vh); }
+  66%       { transform: translate(-5vw, -10vh); }
+}
+
+@keyframes float-purple {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(-10vw, 15vh); }
+  66%       { transform: translate(5vw, -10vh); }
+}
+
+@keyframes float-blue {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(15vw, -15vh); }
+  66%       { transform: translate(-10vw, 10vh); }
+}
+
+@keyframes float-rose {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(-10vw, 15vh); }
+  66%       { transform: translate(10vw, -20vh); }
+}
+
+/* ─────────────────────────────────────────────
+   LOADING SCREEN
+───────────────────────────────────────────── */
+
+/* Progress bar that fills in ~2.5 s */
+.loading-progress-bar {
+  animation: loading-fill 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transform-origin: left;
+}
+
+@keyframes loading-fill {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* Two simple accent blobs for the loading screen itself */
+.loading-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.loading-blob--1 {
+  width: 50vw;
+  height: 50vw;
+  top: -10%;
+  left: -5%;
+  background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+  animation: float-orange 12s ease-in-out infinite;
+}
+
+.loading-blob--2 {
+  width: 40vw;
+  height: 40vw;
+  bottom: -10%;
+  right: -5%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+  animation: float-purple 14s ease-in-out infinite;
+}
+
