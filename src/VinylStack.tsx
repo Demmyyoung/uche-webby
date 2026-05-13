@@ -174,10 +174,12 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
       }
     });
 
-    if (onHoverChange) {
-      onHoverChange(projects[closestIndex]?.color || null);
+    if (closestIndex !== mobileActiveIndex) {
+      if (onHoverChange) {
+        onHoverChange(projects[closestIndex]?.color || null);
+      }
+      setMobileActiveIndex(closestIndex);
     }
-    setMobileActiveIndex(closestIndex);
   };
 
   return (
