@@ -62,6 +62,7 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
+  const [mobileActiveIndex, setMobileActiveIndex] = useState<number>(0);
 
   // Parallax Mouse Tracking Logic
   const mouseX = useMotionValue(0);
@@ -176,6 +177,7 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
     if (onHoverChange) {
       onHoverChange(projects[closestIndex]?.color || null);
     }
+    setMobileActiveIndex(closestIndex);
   };
 
   return (
@@ -195,7 +197,7 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
 
       {/* The Wrapper */}
       <div
-        className="relative z-10 w-full h-screen flex items-center md:justify-center overflow-x-auto md:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-4 md:px-8"
+        className="relative z-10 w-full h-screen flex items-center md:justify-center overflow-x-auto md:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-[7.5vw] md:px-8 scroll-smooth"
         onScroll={handleScrollSnap}
       >
         {projects.map((project, index) => {
@@ -228,7 +230,7 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
           return (
             <motion.div
               key={project._id}
-              className="relative flex-shrink-0 cursor-pointer overflow-hidden transform-gpu snap-center touch-pan-x"
+              className="relative flex-shrink-0 cursor-pointer overflow-hidden transform-gpu snap-center snap-always touch-pan-x"
               style={{
                 backgroundColor: project.color,
                 borderRadius: "48px",
@@ -248,7 +250,8 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
                         width: "85vw",
                         height: "85vh",
                         marginLeft: marginLeft,
-                        scale: 1,
+                        scale: mobileActiveIndex === index ? 1 : 0.9,
+                        opacity: mobileActiveIndex === index ? 1 : 0.6,
                         y: 0,
                         x: 0,
                       }

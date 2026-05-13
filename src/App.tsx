@@ -9,6 +9,8 @@ import CustomCursor from "./components/CustomCursor";
 import MeshBackground from "./components/MeshBackground";
 import LoadingScreen from "./components/LoadingScreen";
 import { client } from "./sanityClient";
+import { Routes, Route } from "react-router-dom";
+import StudioPage from "./admin/StudioPage";
 import "./index.css";
 
 // Minimum time (ms) the loading screen stays visible.
@@ -52,66 +54,71 @@ function App() {
   };
 
   return (
-    <>
-      {/* ── Main application (always mounted, visible once loading screen exits) ── */}
-      <div className="relative w-full text-white bg-black h-screen overflow-hidden font-sans selection:bg-orange-500/30 selection:text-white">
-        <MeshBackground />
-        <CustomCursor />
-        <Navigation activePage={activePage} setActivePage={setActivePage} />
+    <Routes>
+      <Route path="/admin/*" element={<StudioPage />} />
+      <Route path="*" element={
+        <>
+          {/* ── Main application (always mounted, visible once loading screen exits) ── */}
+          <div className="relative w-full text-white bg-black h-screen overflow-hidden font-sans selection:bg-orange-500/30 selection:text-white">
+            <MeshBackground />
+            <CustomCursor />
+            <Navigation activePage={activePage} setActivePage={setActivePage} />
 
-        {/* Reactive Background for VinylStack */}
-        <AnimatePresence>
-          {activePage === "work" && activeColor && (
-            <motion.div
-              key={activeColor}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 0.45, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.1, transition: { duration: 0.8 } }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="absolute inset-0 z-0 pointer-events-none"
-              style={{
-                background: `radial-gradient(circle at 50% 50%, ${activeColor}55 0%, transparent 60%)`,
-                filter: "blur(80px)",
-              }}
-            />
-          )}
-        </AnimatePresence>
+            {/* Reactive Background for VinylStack */}
+            <AnimatePresence>
+              {activePage === "work" && activeColor && (
+                <motion.div
+                  key={activeColor}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 0.45, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.1, transition: { duration: 0.8 } }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  className="absolute inset-0 z-0 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 50% 50%, ${activeColor}55 0%, transparent 60%)`,
+                    filter: "blur(80px)",
+                  }}
+                />
+              )}
+            </AnimatePresence>
 
-        <main className="relative z-10 w-full h-full">
-          <AnimatePresence mode="wait">
-            {activePage === "home" && (
-              <motion.div key="home" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0 overflow-y-auto">
-                <Hero onWorkClick={() => setActivePage("work")} />
-              </motion.div>
-            )}
+            <main className="relative z-10 w-full h-full">
+              <AnimatePresence mode="wait">
+                {activePage === "home" && (
+                  <motion.div key="home" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0 overflow-y-auto">
+                    <Hero onWorkClick={() => setActivePage("work")} />
+                  </motion.div>
+                )}
 
-            {activePage === "work" && (
-              <motion.div key="work" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0">
-                {/* projects prop is pre-fetched — no loading needed inside VinylStack */}
-                <VinylStack projects={projects} onHoverChange={(color) => setActiveColor(color)} />
-              </motion.div>
-            )}
+                {activePage === "work" && (
+                  <motion.div key="work" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0">
+                    {/* projects prop is pre-fetched — no loading needed inside VinylStack */}
+                    <VinylStack projects={projects} onHoverChange={(color) => setActiveColor(color)} />
+                  </motion.div>
+                )}
 
-            {activePage === "about" && (
-              <motion.div key="about" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0 overflow-y-auto">
-                <About />
-              </motion.div>
-            )}
+                {activePage === "about" && (
+                  <motion.div key="about" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0 overflow-y-auto">
+                    <About />
+                  </motion.div>
+                )}
 
-            {activePage === "contact" && (
-              <motion.div key="contact" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0 overflow-y-auto">
-                <Contact />
-              </motion.div>
-            )}
+                {activePage === "contact" && (
+                  <motion.div key="contact" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0 overflow-y-auto">
+                    <Contact />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </main>
+          </div>
+
+          {/* ── Loading screen sits on top; slides away when appReady = true ── */}
+          <AnimatePresence>
+            {!appReady && <LoadingScreen key="loader" />}
           </AnimatePresence>
-        </main>
-      </div>
-
-      {/* ── Loading screen sits on top; slides away when appReady = true ── */}
-      <AnimatePresence>
-        {!appReady && <LoadingScreen key="loader" />}
-      </AnimatePresence>
-    </>
+        </>
+      } />
+    </Routes>
   );
 }
 

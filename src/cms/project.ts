@@ -1,4 +1,4 @@
-import {defineField, defineType, type Rule} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 export default defineType({
   name: 'project',
@@ -9,19 +9,19 @@ export default defineType({
       name: 'title',
       title: 'Project Title',
       type: 'string',
-      validation: (Rule: Rule) => Rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'description',
       title: 'Short Description',
       type: 'text',
-      validation: (Rule: Rule) => Rule.required().max(250),
+      validation: (rule) => rule.required().max(250),
     }),
     defineField({
       name: 'color',
       title: 'Brand Hex Color (e.g. #A855F7)',
       type: 'string',
-      validation: (Rule: Rule) => Rule.required(),
+      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'websiteUrl',
@@ -35,7 +35,7 @@ export default defineType({
       options: {
         hotspot: true,
       },
-      validation: (Rule: Rule) => Rule.required(),
+      validation: (rule) => rule.required(),
     }),
   ],
   preview: {
