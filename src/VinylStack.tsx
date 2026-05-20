@@ -65,6 +65,14 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const [mobileActiveIndex, setMobileActiveIndex] = useState<number>(0);
 
+  const currentTransition = isMobile
+    ? {
+        type: "spring",
+        stiffness: 150,
+        damping: 22,
+      }
+    : springTransition;
+
   // Parallax Mouse Tracking Logic
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -76,6 +84,59 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
   // Inverse tracking for depth: maps normalized mouse -1 to 1 to -3% to 3% movement
   const imageX = useTransform(mouseXSpring, [-1, 1], ["-3%", "3%"]);
   const imageY = useTransform(mouseYSpring, [-1, 1], ["-3%", "3%"]);
+
+  // Touch Elastic Pull Logic for Mobile overscroll
+  const touchStartXRef = useRef<number | null>(null);
+  const isAtStartRef = useRef<boolean>(false);
+  const isAtEndRef = useRef<boolean>(false);
+  const pullX = useMotionValue(0);
+  const pullXSpring = useSpring(pullX, { damping: 30, stiffness: 200 });
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isMobile) return;
+    const container = e.currentTarget;
+    touchStartXRef.current = e.touches[0].clientX;
+    isAtStartRef.current = container.scrollLeft <= 1;
+    isAtEndRef.current = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!isMobile || touchStartXRef.current === null) return;
+    const container = e.currentTarget;
+    const deltaX = e.touches[0].clientX - touchStartXRef.current;
+
+    const isAtStart = container.scrollLeft <= 1;
+    const isAtEnd = container.scrollLeft >= container.scrollWidth - container.clientWidth - 1;
+
+    if (isAtStart && deltaX > 0) {
+      if (!isAtStartRef.current) {
+        touchStartXRef.current = e.touches[0].clientX;
+        isAtStartRef.current = true;
+        pullX.set(0);
+      } else {
+        const dampened = Math.pow(deltaX, 0.75);
+        pullX.set(dampened);
+      }
+    } else if (isAtEnd && deltaX < 0) {
+      if (!isAtEndRef.current) {
+        touchStartXRef.current = e.touches[0].clientX;
+        isAtEndRef.current = true;
+        pullX.set(0);
+      } else {
+        const dampened = -Math.pow(-deltaX, 0.75);
+        pullX.set(dampened);
+      }
+    } else {
+      pullX.set(0);
+      isAtStartRef.current = false;
+      isAtEndRef.current = false;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartXRef.current = null;
+    pullX.set(0);
+  };
 
   const handleGlobalMouseMove = (e: React.MouseEvent) => {
     if (isMobile) return;
@@ -205,9 +266,13 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
       />
 
       {/* The Wrapper */}
-      <div
-        className={`relative z-10 w-full h-full flex items-center md:justify-center overflow-x-auto md:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth transition-all duration-500 ${zoomedIndex !== null ? "px-0" : "px-[7.5vw] md:px-8"}`}
+      <motion.div
+        style={{ x: pullXSpring }}
+        className={`relative z-10 w-full h-full flex items-center md:justify-center overflow-x-auto md:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isMobile ? "" : "scroll-smooth"} transition-all duration-500 ${zoomedIndex !== null ? "px-0" : "px-[7.5vw] md:px-8"}`}
         onScroll={handleScrollSnap}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {projects.map((project, index) => {
           const isActive = hoveredIndex === index;
@@ -291,7 +356,7 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
                           zIndex: isActive ? 50 : index,
                         }
               }
-              transition={springTransition}
+              transition={currentTransition}
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
             >
@@ -373,7 +438,7 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
             </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 }
