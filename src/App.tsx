@@ -5,7 +5,6 @@ import Navigation, { PageId } from "./components/Navigation";
 import Hero from "./components/Hero";
 import About from "./components/About";
 import Contact from "./components/Contact";
-import CustomCursor from "./components/CustomCursor";
 import MeshBackground from "./components/MeshBackground";
 import LoadingScreen from "./components/LoadingScreen";
 import { client } from "./sanityClient";
@@ -61,7 +60,6 @@ function App() {
           {/* ── Main application (always mounted, visible once loading screen exits) ── */}
           <div className="relative w-full text-white bg-black h-screen overflow-hidden font-sans selection:bg-orange-500/30 selection:text-white">
             <MeshBackground />
-            <CustomCursor />
             <Navigation activePage={activePage} setActivePage={setActivePage} />
 
             {/* Reactive Background for VinylStack */}
