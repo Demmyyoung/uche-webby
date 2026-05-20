@@ -53,9 +53,10 @@ const springTransition = {
 interface VinylStackProps {
   projects: Project[];                                 // passed from App.tsx
   onHoverChange?: (activeColor: string | null) => void;
+  onHoverStateChange?: (isHovered: boolean) => void;
 }
 
-export default function VinylStack({ projects, onHoverChange }: VinylStackProps) {
+export default function VinylStack({ projects, onHoverChange, onHoverStateChange }: VinylStackProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [preHoveredIndex, setPreHoveredIndex] = useState<number | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -118,6 +119,9 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
         if (onHoverChange) {
           onHoverChange(projects[index]?.color || null);
         }
+        if (onHoverStateChange) {
+          onHoverStateChange(true);
+        }
         triggerHaptic();
       }, 150);
     }
@@ -133,6 +137,9 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
         setHoveredIndex(null);
         if (onHoverChange) onHoverChange(null);
+        if (onHoverStateChange) {
+          onHoverStateChange(false);
+        }
       }, 100);
     }
   };
@@ -184,7 +191,7 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
 
   return (
     <div
-      className="w-full h-screen flex items-center justify-center relative overflow-hidden font-sans"
+      className={`w-full h-screen flex items-center justify-center relative overflow-hidden font-sans transition-all duration-500 ${zoomedIndex !== null ? "pb-0" : "pb-12 md:pb-0"}`}
       onMouseMove={handleGlobalMouseMove}
     >
       {/* Loading is handled by the app-level LoadingScreen — no spinner needed here */}
@@ -199,7 +206,7 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
 
       {/* The Wrapper */}
       <div
-        className="relative z-10 w-full h-screen flex items-center md:justify-center overflow-x-auto md:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-[7.5vw] md:px-8 scroll-smooth"
+        className={`relative z-10 w-full h-full flex items-center md:justify-center overflow-x-auto md:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] scroll-smooth transition-all duration-500 ${zoomedIndex !== null ? "px-0" : "px-[7.5vw] md:px-8"}`}
         onScroll={handleScrollSnap}
       >
         {projects.map((project, index) => {
@@ -235,36 +242,54 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
               className="relative flex-shrink-0 cursor-pointer overflow-hidden transform-gpu snap-center snap-always touch-pan-x"
               style={{
                 backgroundColor: project.color,
-                borderRadius: "48px",
-                zIndex: isActive ? 50 : index,
               }}
               initial={false}
               animate={
                 zoomedIndex === index
                   ? {
-                      scale: 25, // The 'voom' to fill screen
-                      opacity: 0, // Fade out as it passes camera
+                      width: "100vw",
+                      height: "100vh",
+                      scale: 1.0,
+                      borderRadius: "0px",
                       zIndex: 100,
-                      transition: { duration: 0.6, ease: "circIn" },
+                      opacity: 1,
+                      x: 0,
+                      y: 0,
+                      marginLeft: "0px",
+                      transition: { duration: 0.6, ease: "easeInOut" },
                     }
-                  : isMobile
+                  : zoomedIndex !== null
                     ? {
-                        width: "85vw",
-                        height: "85vh",
-                        marginLeft: marginLeft,
-                        scale: mobileActiveIndex === index ? 1 : 0.9,
-                        opacity: mobileActiveIndex === index ? 1 : 0.6,
-                        y: 0,
-                        x: 0,
+                        x: index < zoomedIndex ? (isMobile ? "-120vw" : "-100vw") : (isMobile ? "120vw" : "100vw"),
+                        opacity: 0,
+                        width: "0px",
+                        marginLeft: "0px",
+                        borderRadius: "48px",
+                        zIndex: index,
+                        transition: { duration: 0.5, ease: "easeInOut" }
                       }
-                    : {
-                        width: isActive ? "55vw" : "10vw",
-                        height: isActive ? "85vh" : "75vh",
-                        marginLeft: marginLeft,
-                        scale: isActive ? 1.02 : isPreActive ? 1.05 : 1,
-                        y: isPreActive && !isActive ? -15 : 0,
-                        x: 0,
-                      }
+                    : isMobile
+                      ? {
+                          width: "85vw",
+                          height: "85vh",
+                          borderRadius: "48px",
+                          marginLeft: marginLeft,
+                          scale: mobileActiveIndex === index ? 1 : 0.9,
+                          opacity: mobileActiveIndex === index ? 1 : 0.6,
+                          y: 0,
+                          x: 0,
+                          zIndex: mobileActiveIndex === index ? 50 : index,
+                        }
+                      : {
+                          width: isActive ? "55vw" : "10vw",
+                          height: isActive ? "85vh" : "75vh",
+                          borderRadius: "48px",
+                          marginLeft: marginLeft,
+                          scale: isActive ? 1.02 : isPreActive ? 1.05 : 1,
+                          y: isPreActive && !isActive ? -15 : 0,
+                          x: 0,
+                          zIndex: isActive ? 50 : index,
+                        }
               }
               transition={springTransition}
               onMouseEnter={() => handleMouseEnter(index)}
@@ -290,12 +315,12 @@ export default function VinylStack({ projects, onHoverChange }: VinylStackProps)
                 <motion.div
                   initial={false}
                   animate={{
-                    opacity: isMobile || isActive ? 1 : 0,
-                    y: isMobile || isActive ? 0 : 20,
+                    opacity: zoomedIndex === index ? 0 : (isMobile || isActive ? 1 : 0),
+                    y: zoomedIndex === index ? -20 : (isMobile || isActive ? 0 : 20),
                   }}
                   transition={{
                     duration: 0.3,
-                    delay: isActive && !isMobile ? 0.1 : 0,
+                    delay: zoomedIndex === index ? 0 : (isActive && !isMobile ? 0.1 : 0),
                   }}
                   className={`w-full ${isActive ? "max-w-xl" : "max-w-0"} md:max-w-lg lg:max-w-2xl pointer-events-auto`}
                   style={{

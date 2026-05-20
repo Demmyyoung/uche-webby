@@ -19,6 +19,7 @@ const MIN_LOAD_MS = 2500;
 function App() {
   const [activePage, setActivePage] = useState<PageId>("home");
   const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [isPanelHovered, setIsPanelHovered] = useState(false);
 
   // ─── Pre-fetch: data & timing ──────────────────────────────────────────────
   // projects starts as the local fallback so VinylStack always has something.
@@ -60,7 +61,7 @@ function App() {
           {/* ── Main application (always mounted, visible once loading screen exits) ── */}
           <div className="relative w-full text-white bg-black h-screen overflow-hidden font-sans selection:bg-orange-500/30 selection:text-white">
             <MeshBackground />
-            <Navigation activePage={activePage} setActivePage={setActivePage} />
+            <Navigation activePage={activePage} setActivePage={setActivePage} isHidden={activePage === "work" && isPanelHovered} />
 
             {/* Reactive Background for VinylStack */}
             <AnimatePresence>
@@ -91,7 +92,7 @@ function App() {
                 {activePage === "work" && (
                   <motion.div key="work" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0">
                     {/* projects prop is pre-fetched — no loading needed inside VinylStack */}
-                    <VinylStack projects={projects} onHoverChange={(color) => setActiveColor(color)} />
+                    <VinylStack projects={projects} onHoverChange={(color) => setActiveColor(color)} onHoverStateChange={setIsPanelHovered} />
                   </motion.div>
                 )}
 

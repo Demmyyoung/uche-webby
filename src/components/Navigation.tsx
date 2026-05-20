@@ -7,6 +7,7 @@ export type PageId = "home" | "work" | "about" | "contact";
 interface NavigationProps {
   activePage: PageId;
   setActivePage: (id: PageId) => void;
+  isHidden?: boolean;
 }
 
 const navItems = [
@@ -16,10 +17,12 @@ const navItems = [
   { id: "contact", label: "Contact", icon: Mail },
 ];
 
-export default function Navigation({ activePage, setActivePage }: NavigationProps) {
+export default function Navigation({ activePage, setActivePage, isHidden = false }: NavigationProps) {
   const [isMobile, setIsMobile] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -27,11 +30,25 @@ export default function Navigation({ activePage, setActivePage }: NavigationProp
   }, []);
 
   return (
-    <div className="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-50 pointer-events-auto">
+    <div 
+      className="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-50 transition-all duration-300"
+      style={{
+        pointerEvents: isHidden ? "none" : "auto"
+      }}
+    >
       <motion.nav
         initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 400, damping: 30, delay: 0.5 }}
+        animate={{ 
+          y: isHidden ? 120 : 0, 
+          opacity: isHidden ? 0 : 1,
+          scale: isHidden ? 0.95 : 1
+        }}
+        transition={{ 
+          type: "spring", 
+          stiffness: 350, 
+          damping: 30, 
+          delay: hasMounted ? 0 : 0.5 
+        }}
         className="flex items-center gap-2 md:gap-4 p-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl"
       >
         {navItems.map((item) => {
