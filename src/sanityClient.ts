@@ -3,7 +3,7 @@ import imageUrlBuilder from '@sanity/image-url'
 
 // Replace these with your actual Sanity details once you create the project!
 export const client = createClient({
-  projectId: 'cb7zixhl', // Your new Sanity Project ID!
+  projectId: '0jmt9kru', // Your new Sanity Project ID!
   dataset: 'production', 
   useCdn: true, // Use Edge for fast reads
   apiVersion: '2024-03-01', // Use current date for stable API version

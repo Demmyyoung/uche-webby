@@ -18,7 +18,6 @@ const MIN_LOAD_MS = 2500;
 
 function App() {
   const [activePage, setActivePage] = useState<PageId>("home");
-  const [activeColor, setActiveColor] = useState<string | null>(null);
   const [isPanelHovered, setIsPanelHovered] = useState(false);
 
   // ─── Pre-fetch: data & timing ──────────────────────────────────────────────
@@ -65,16 +64,16 @@ function App() {
 
             {/* Reactive Background for VinylStack */}
             <AnimatePresence>
-              {activePage === "work" && activeColor && (
+              {activePage === "work" && isPanelHovered && (
                 <motion.div
-                  key={activeColor}
+                  key="work-hover-bg"
                   initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 0.45, scale: 1 }}
+                  animate={{ opacity: 0.2, scale: 1 }}
                   exit={{ opacity: 0, scale: 1.1, transition: { duration: 0.8 } }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
                   className="absolute inset-0 z-0 pointer-events-none"
                   style={{
-                    background: `radial-gradient(circle at 50% 50%, ${activeColor}55 0%, transparent 60%)`,
+                    background: `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 60%)`,
                     filter: "blur(80px)",
                   }}
                 />
@@ -92,7 +91,7 @@ function App() {
                 {activePage === "work" && (
                   <motion.div key="work" variants={pageVariants} initial="initial" animate="animate" exit="exit" className="absolute inset-0">
                     {/* projects prop is pre-fetched — no loading needed inside VinylStack */}
-                    <VinylStack projects={projects} onHoverChange={(color) => setActiveColor(color)} onHoverStateChange={setIsPanelHovered} />
+                    <VinylStack projects={projects} onHoverStateChange={setIsPanelHovered} />
                   </motion.div>
                 )}
 

@@ -40,7 +40,7 @@ export default function Hero({ onWorkClick }: HeroProps) {
           <motion.div variants={itemVariants} className="mb-6 flex items-center gap-4">
             <span className="w-12 h-[2px] bg-white/50" />
             <h2 className="text-white/70 uppercase tracking-[0.3em] text-sm md:text-base font-medium">
-              Oluwademilade Williams
+              Uchechukwu Ogbuaku
             </h2>
           </motion.div>
 
@@ -48,9 +48,9 @@ export default function Hero({ onWorkClick }: HeroProps) {
             variants={itemVariants}
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] mb-8 font-sans"
           >
-            Front-End <span className="text-white/40 italic font-serif">Engineer</span>
+            Supply Chain <span className="text-white/40 italic font-serif">Management</span>
             <br />
-            & <span className="relative inline-block">Entrepreneur
+            & <span className="relative inline-block">Operations
               <motion.span 
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -64,7 +64,7 @@ export default function Hero({ onWorkClick }: HeroProps) {
             variants={itemVariants}
             className="text-xl md:text-2xl text-white/70 max-w-2xl font-light mb-12 leading-relaxed"
           >
-            Software Engineering student and entrepreneur based in Lagos, Nigeria. Specializing in high-performance, aesthetically distinct interfaces for the tech and fashion sectors.
+            Supply Chain Management professional based in Houston, TX and Lagos, specializing in operations coordination, event logistics, and data-driven workflow optimization.
           </motion.p>
 
           <motion.div variants={itemVariants} className="flex items-center gap-6">

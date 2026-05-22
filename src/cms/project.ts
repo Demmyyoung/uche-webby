@@ -17,31 +17,31 @@ export default defineType({
       type: 'text',
       validation: (rule) => rule.required().max(250),
     }),
-    defineField({
-      name: 'color',
-      title: 'Brand Hex Color (e.g. #A855F7)',
-      type: 'string',
-      validation: (rule) => rule.required(),
-    }),
+
     defineField({
       name: 'websiteUrl',
       title: 'Website URL',
       type: 'url',
     }),
     defineField({
-      name: 'image',
-      title: 'Cover Image',
-      type: 'image',
-      options: {
-        hotspot: true,
-      },
-      validation: (rule) => rule.required(),
+      name: 'images',
+      title: 'Project Images',
+      type: 'array',
+      of: [
+        {
+          type: 'image',
+          options: {
+            hotspot: true,
+          },
+        },
+      ],
+      validation: (rule) => rule.required().min(1),
     }),
   ],
   preview: {
     select: {
       title: 'title',
-      media: 'image',
+      media: 'images.0',
     },
   },
 })

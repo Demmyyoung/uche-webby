@@ -30,7 +30,7 @@ export default function LoadingScreen() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            OW
+            UO
           </span>
 
           {/* Orange accent line */}
@@ -50,10 +50,10 @@ export default function LoadingScreen() {
           className="text-center flex flex-col gap-2"
         >
           <p className="text-white/90 text-sm md:text-base font-semibold tracking-[0.35em] uppercase">
-            Oluwademilade Williams
+            Uchechukwu Ogbuaku
           </p>
           <p className="text-white/30 text-xs tracking-[0.3em] uppercase">
-            Front-End Engineer &amp; Entrepreneur
+            Supply Chain Management &amp; Operations
           </p>
         </motion.div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { urlFor } from "./sanityClient";
 
 // 1. Updated Interface to support Image objects from Sanity
@@ -9,8 +9,9 @@ export interface Project {
   _id: string;
   title: string;
   description: string;
-  color: string;
+  color?: string; // Optional color from Sanity (no longer used for card backgrounds)
   image?: any; // Sanity Image Object
+  images?: any[]; // Sanity Image Objects
   websiteUrl?: string; // URL to open
 }
 
@@ -18,27 +19,76 @@ export interface Project {
 export const fallbackProjects: Project[] = [
   {
     _id: "1",
-    title: "D-MAX",
+    title: "Leadership",
     description:
-      "A bespoke clothing customization software and streetwear brand.",
-    color: "#A855F7", // Purple
-    websiteUrl: "https://your-dmax-website.com",
+      "Served as Vice Chairman of the SHRL Advisory Committee, representing student housing policy and operations to university leadership while directing resource allocation.",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwuogbuaku",
+    images: [
+      "/img/IMG-20260522-WA0004.jpg",
+      "/img/IMG-20260522-WA0005.jpg",
+      "/img/IMG-20260522-WA0015.jpg"
+    ]
   },
   {
     _id: "2",
-    title: "Desypher",
+    title: "Campus Presence",
     description:
-      "An AI-powered mobile study application designed to help students track and predict their academic grades.",
-    color: "#06B6D4", // Cyan
-    websiteUrl: "https://your-desypher-website.com",
+      "Coordinated event logistics and operations for student-led initiatives as Marketing Executive for the College Hustle Collective, reaching over 1,500 students.",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwuogbuaku",
+    images: [
+      "/img/the cage ambassador.jpg",
+      "/img/abpsi volunteer.jpg",
+      "/img/IMG-20260522-WA0013.jpg",
+      "/img/IMG-20260522-WA0017.jpg",
+      "/img/IMG-20260522-WA0011.jpg",
+      "/img/IMG-20260522-WA0012.jpg"
+    ]
   },
   {
     _id: "3",
-    title: "NGO Web Initiatives",
+    title: "Academic Experience",
     description:
-      "A digital impact project providing custom web design and development for Nigerian non-governmental organizations to secure international grant funding.",
-    color: "#ec4899", // Magenta/Pinkish
-    websiteUrl: "https://your-ngo-website.com",
+      "Conducted research on tech-based logistics solutions under the African Continental Free Trade Area (AfCFTA) framework to optimize cross-border supply chains.",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwuogbuaku",
+    images: [
+      "/img/IMG-20260522-WA0007.jpg",
+      "/img/IMG-20260522-WA0009.jpg",
+      "/img/IMG-20260522-WA0010.jpg"
+    ]
+  },
+  {
+    _id: "4",
+    title: "Career Interests",
+    description:
+      "Focusing on inventory management, asset tracking, scheduling systems, and data-driven supply chain forecasting with advanced Microsoft Excel modeling.",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwuogbuaku",
+    images: [
+      "/img/IMG-20260522-WA0003.jpg",
+      "/img/IMG-20260522-WA0008.jpg"
+    ]
+  },
+  {
+    _id: "5",
+    title: "Career Goals",
+    description:
+      "Aiming to lead global supply chain operations, optimize logistics workflows, and leverage data analytics for efficient distribution and service delivery.",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwuogbuaku",
+    images: [
+      "/img/IMG-20260522-WA0008.jpg"
+    ]
+  },
+  {
+    _id: "6",
+    title: "Personal Interests",
+    description:
+      "Combining interests in technical sound engineering, client services, amateur photography, and financial market analysis of equities.",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwuogbuaku",
+    images: [
+      "/img/IMG-20260522-WA0006.jpg",
+      "/img/IMG-20260522-WA0016.jpg",
+      "/img/IMG-20260522-WA0018.jpg",
+      "/img/IMG-20260522-WA0014.jpg"
+    ]
   },
 ];
 
@@ -52,18 +102,17 @@ const springTransition = {
 // so by the time the user navigates here, data is already available.
 interface VinylStackProps {
   projects: Project[];                                 // passed from App.tsx
-  onHoverChange?: (activeColor: string | null) => void;
   onHoverStateChange?: (isHovered: boolean) => void;
 }
 
-export default function VinylStack({ projects, onHoverChange, onHoverStateChange }: VinylStackProps) {
+export default function VinylStack({ projects, onHoverStateChange }: VinylStackProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [preHoveredIndex, setPreHoveredIndex] = useState<number | null>(null);
   const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
   const [mobileActiveIndex, setMobileActiveIndex] = useState<number>(0);
+  const [slideIndex, setSlideIndex] = useState<number>(0);
 
   const currentTransition = isMobile
     ? {
@@ -73,17 +122,7 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
       }
     : springTransition;
 
-  // Parallax Mouse Tracking Logic
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 200 };
-  const mouseXSpring = useSpring(mouseX, springConfig);
-  const mouseYSpring = useSpring(mouseY, springConfig);
-
-  // Inverse tracking for depth: maps normalized mouse -1 to 1 to -3% to 3% movement
-  const imageX = useTransform(mouseXSpring, [-1, 1], ["-3%", "3%"]);
-  const imageY = useTransform(mouseYSpring, [-1, 1], ["-3%", "3%"]);
+  // Parallax tracking logic removed to prevent zooming and mouse-following effect
 
   // Touch Elastic Pull Logic for Mobile overscroll
   const touchStartXRef = useRef<number | null>(null);
@@ -138,14 +177,7 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
     pullX.set(0);
   };
 
-  const handleGlobalMouseMove = (e: React.MouseEvent) => {
-    if (isMobile) return;
-    // Normalize mouse coordinates from -1 to 1 based on screen size
-    const x = (e.clientX / window.innerWidth) * 2 - 1;
-    const y = (e.clientY / window.innerHeight) * 2 - 1;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
+  // handleGlobalMouseMove removed
 
   // No fetch needed here — projects are pre-loaded in App.tsx during the loading screen.
 
@@ -156,6 +188,23 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Slideshow timer runs only when a panel is hovered (or active on mobile)
+  useEffect(() => {
+    const activeIdx = isMobile ? mobileActiveIndex : hoveredIndex;
+    if (activeIdx === null) {
+      setSlideIndex(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setSlideIndex((prev) => prev + 1);
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [hoveredIndex, mobileActiveIndex, isMobile]);
 
   // Tiny vibration when interacting on supported devices
   const triggerHaptic = () => {
@@ -172,14 +221,10 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
     if (!isMobile) {
       if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
 
-      setPreHoveredIndex(index);
       if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
 
       hoverTimeoutRef.current = setTimeout(() => {
         setHoveredIndex(index);
-        if (onHoverChange) {
-          onHoverChange(projects[index]?.color || null);
-        }
         if (onHoverStateChange) {
           onHoverStateChange(true);
         }
@@ -192,12 +237,9 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
     if (!isMobile) {
       if (resetTimeoutRef.current) clearTimeout(resetTimeoutRef.current);
 
-      setPreHoveredIndex(null);
-
       resetTimeoutRef.current = setTimeout(() => {
         if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
         setHoveredIndex(null);
-        if (onHoverChange) onHoverChange(null);
         if (onHoverStateChange) {
           onHoverStateChange(false);
         }
@@ -243,9 +285,6 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
     });
 
     if (closestIndex !== mobileActiveIndex) {
-      if (onHoverChange) {
-        onHoverChange(projects[closestIndex]?.color || null);
-      }
       setMobileActiveIndex(closestIndex);
     }
   };
@@ -253,7 +292,6 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
   return (
     <div
       className={`w-full h-screen flex items-center justify-center relative overflow-hidden font-sans transition-all duration-500 ${zoomedIndex !== null ? "pb-0" : "pb-12 md:pb-0"}`}
-      onMouseMove={handleGlobalMouseMove}
     >
       {/* Loading is handled by the app-level LoadingScreen — no spinner needed here */}
 
@@ -276,7 +314,6 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
       >
         {projects.map((project, index) => {
           const isActive = hoveredIndex === index;
-          const isPreActive = preHoveredIndex === index;
 
           // "Part Ways" Logic (Negative Margins)
           let marginLeft = index === 0 ? "0px" : "-4vw";
@@ -298,15 +335,48 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
             marginLeft = index === 0 ? "0px" : "4vw";
           }
 
-          // Generate Image URL if it exists
-          const imageUrl = project.image ? urlFor(project.image).url() : null;
+          // Generate Image URL based on slideshow or legacy image field (supporting local files & Sanity references)
+          let imageUrl: string | null = null;
+          const isActiveCard = isMobile ? mobileActiveIndex === index : hoveredIndex === index;
+          if (project.images && project.images.length > 0) {
+            const currentImgIndex = isActiveCard ? (slideIndex % project.images.length) : 0;
+            const currentImage = project.images[currentImgIndex];
+            if (typeof currentImage === "string") {
+              imageUrl = currentImage;
+            } else if (currentImage) {
+              try {
+                imageUrl = urlFor(currentImage).url();
+              } catch (e) {
+                imageUrl = null;
+              }
+            }
+          } else if (project.image) {
+            if (typeof project.image === "string") {
+              imageUrl = project.image;
+            } else {
+              try {
+                imageUrl = urlFor(project.image).url();
+              } catch (e) {
+                imageUrl = null;
+              }
+            }
+          }
 
           return (
             <motion.div
               key={project._id}
-              className="relative flex-shrink-0 cursor-pointer overflow-hidden transform-gpu snap-center snap-always touch-pan-x"
+              className="relative flex-shrink-0 cursor-pointer overflow-hidden transform-gpu snap-center snap-always touch-pan-x border"
               style={{
-                backgroundColor: project.color,
+                backgroundColor: isActiveCard ? "#121212" : "rgba(24, 24, 27, 0.45)",
+                backdropFilter: isActiveCard ? "none" : "blur(16px)",
+                borderColor: isActiveCard ? "rgba(255, 255, 255, 0.0)" : "rgba(255, 255, 255, 0.08)",
+              }}
+              onClick={(e) => {
+                if (isActive || (isMobile && mobileActiveIndex === index)) {
+                  handleViewProject(e, index, project.websiteUrl);
+                } else if (!isMobile) {
+                  handleMouseEnter(index);
+                }
               }}
               initial={false}
               animate={
@@ -350,8 +420,8 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
                           height: isActive ? "85vh" : "75vh",
                           borderRadius: "48px",
                           marginLeft: marginLeft,
-                          scale: isActive ? 1.02 : isPreActive ? 1.05 : 1,
-                          y: isPreActive && !isActive ? -15 : 0,
+                          scale: 1,
+                          y: 0,
                           x: 0,
                           zIndex: isActive ? 50 : index,
                         }
@@ -360,19 +430,39 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={handleMouseLeave}
             >
-              {/* Image Render if Available */}
-              {imageUrl && (
-                <motion.img
-                  src={imageUrl}
-                  alt={project.title}
-                  className="absolute inset-0 w-full h-full object-cover z-0"
-                  style={{
-                    x: isActive ? imageX : 0,
-                    y: isActive ? imageY : 0,
-                    scale: 1.05, // Prevent edges showing during panning parallax
-                  }}
-                />
-              )}
+              {/* Image Render if Available with Slideshow Crossfade */}
+              <AnimatePresence>
+                {imageUrl && (
+                  <>
+                    {/* Blurred dynamic background glow (active only) */}
+                    {isActiveCard && (
+                      <motion.img
+                        key={`${imageUrl}-blur`}
+                        src={imageUrl}
+                        alt=""
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 0.35 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
+                        className="absolute inset-0 w-full h-full object-cover z-0 filter blur-2xl scale-110 opacity-35 select-none pointer-events-none"
+                      />
+                    )}
+                    {/* Sharp foreground image */}
+                    <motion.img
+                      key={imageUrl}
+                      src={imageUrl}
+                      alt={project.title}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                      className={`absolute inset-0 w-full h-full z-0 transition-all duration-300 ${
+                        isActiveCard ? "object-contain p-4 md:p-8" : "object-cover"
+                      }`}
+                    />
+                  </>
+                )}
+              </AnimatePresence>
 
               {/* Internal Content Container */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-8 z-10">
@@ -395,24 +485,9 @@ export default function VinylStack({ projects, onHoverChange, onHoverStateChange
                   <h3 className="text-white text-3xl md:text-5xl font-extrabold mb-4 tracking-tight drop-shadow-lg leading-tight">
                     {project.title}
                   </h3>
-                  <p className="text-white/90 text-sm md:text-lg font-medium mb-8 leading-relaxed line-clamp-3 md:line-clamp-none drop-shadow-md max-w-[85%]">
+                  <p className="text-white/90 text-sm md:text-lg font-medium mb-4 leading-relaxed line-clamp-3 md:line-clamp-none drop-shadow-md max-w-[85%]">
                     {project.description}
                   </p>
-
-                  <motion.button
-                    onClick={(e) =>
-                      handleViewProject(e, index, project.websiteUrl)
-                    }
-                    whileHover={{
-                      scale: 1.05,
-                      backgroundColor: "#ffffff",
-                      color: "#000000",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 font-bold text-sm transition-colors duration-200 uppercase tracking-widest shadow-xl pointer-events-auto w-max"
-                  >
-                    View Project
-                  </motion.button>
                 </motion.div>
 
                 {/* "Vinyl Edge / Spine" Text */}

@@ -7,7 +7,7 @@ export default defineConfig({
   name: 'default',
   title: 'Portfolio CMS',
 
-  projectId: 'cb7zixhl',
+  projectId: '0jmt9kru',
   dataset: 'production',
   
   // This is the important part for embedding!
