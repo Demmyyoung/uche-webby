@@ -38,10 +38,10 @@ const contacts = [
     external: false,
   },
   {
-    href: "https://www.linkedin.com/in/uchechukwu-ogbuaku",
+    href: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
     icon: Linkedin,
     label: "LinkedIn",
-    display: "linkedin.com/in/uchechukwu-ogbuaku",
+    display: "linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
     external: true,
   },
 ];
