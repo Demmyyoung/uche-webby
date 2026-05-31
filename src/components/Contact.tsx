@@ -38,7 +38,7 @@ const contacts = [
     external: false,
   },
   {
-    href: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    href: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     icon: Linkedin,
     label: "LinkedIn",
     display: "linkedin.com/in/uchechukwu-ogbuaku-1a6145306",

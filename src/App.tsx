@@ -7,6 +7,7 @@ import About from "./components/About";
 import Contact from "./components/Contact";
 import MeshBackground from "./components/MeshBackground";
 import LoadingScreen from "./components/LoadingScreen";
+import DesignedByDemi from "./components/DesignedByDemi";
 import { client } from "./sanityClient";
 import { Routes, Route } from "react-router-dom";
 import StudioPage from "./admin/StudioPage";
@@ -108,6 +109,7 @@ function App() {
                 )}
               </AnimatePresence>
             </main>
+            <DesignedByDemi />
           </div>
 
           {/* ── Loading screen sits on top; slides away when appReady = true ── */}

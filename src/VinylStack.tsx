@@ -22,7 +22,7 @@ export const fallbackProjects: Project[] = [
     title: "Leadership",
     description:
       "Served as Vice Chairman of the SHRL Advisory Committee, representing student housing policy and operations to university leadership while directing resource allocation.",
-    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     images: [
       "/img/IMG-20260522-WA0004.jpg",
       "/img/IMG-20260522-WA0005.jpg",
@@ -34,7 +34,7 @@ export const fallbackProjects: Project[] = [
     title: "Campus Presence",
     description:
       "Coordinated event logistics and operations for student-led initiatives as Marketing Executive for the College Hustle Collective, reaching over 1,500 students.",
-    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     images: [
       "/img/the cage ambassador.jpg",
       "/img/abpsi volunteer.jpg",
@@ -49,7 +49,7 @@ export const fallbackProjects: Project[] = [
     title: "Academic Experience",
     description:
       "Conducted research on tech-based logistics solutions under the African Continental Free Trade Area (AfCFTA) framework to optimize cross-border supply chains.",
-    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     images: [
       "/img/IMG-20260522-WA0007.jpg",
       "/img/IMG-20260522-WA0009.jpg",
@@ -61,7 +61,7 @@ export const fallbackProjects: Project[] = [
     title: "Career Interests",
     description:
       "Focusing on inventory management, asset tracking, scheduling systems, and data-driven supply chain forecasting with advanced Microsoft Excel modeling.",
-    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     images: [
       "/img/IMG-20260522-WA0003.jpg",
       "/img/IMG-20260522-WA0008.jpg"
@@ -72,7 +72,7 @@ export const fallbackProjects: Project[] = [
     title: "Career Goals",
     description:
       "Aiming to lead global supply chain operations, optimize logistics workflows, and leverage data analytics for efficient distribution and service delivery.",
-    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     images: [
       "/img/IMG-20260522-WA0008.jpg"
     ]
@@ -82,7 +82,7 @@ export const fallbackProjects: Project[] = [
     title: "Personal Interests",
     description:
       "Combining interests in technical sound engineering, client services, amateur photography, and financial market analysis of equities.",
-    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
+    websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3BzxxYdWVdRsCVV6Da6bmRLw%3D%3D",
     images: [
       "/img/IMG-20260522-WA0006.jpg",
       "/img/IMG-20260522-WA0016.jpg",
