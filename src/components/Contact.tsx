@@ -86,9 +86,9 @@ export default function Contact() {
                   <div className="p-2 bg-white/5 rounded-xl group-hover:bg-white/10 transition-colors">
                     <Icon className="text-white/60 group-hover:text-white transition-colors" size={20} />
                   </div>
-                  <div className="text-left">
+                  <div className="text-left min-w-0">
                     <p className="text-xs text-white/40 mb-0.5 uppercase tracking-widest">{item.label}</p>
-                    <p className="font-medium text-white/90">{item.display}</p>
+                    <p className="font-medium text-white/90 break-all md:break-normal">{item.display}</p>
                   </div>
                 </div>
                 <ExternalLink size={16} className="text-white/20 group-hover:text-white/60 transition-colors shrink-0" />
