@@ -38,11 +38,7 @@ const contacts = [
     external: false,
   },
   {
-<<<<<<< HEAD
     href: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/",
-=======
-    href: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
->>>>>>> bfa68127b66c4c5f5bc680061e7bbe998235bc62
     icon: Linkedin,
     label: "LinkedIn",
     display: "linkedin.com/in/uchechukwu-ogbuaku-1a6145306",
