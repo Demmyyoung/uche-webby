@@ -110,18 +110,18 @@ export default function DesignedByDemi() {
         onMouseLeave={handleMouseLeave}
       >
         <motion.div
-          className="relative overflow-hidden cursor-pointer flex flex-col justify-center items-center transition-colors duration-300"
+          className="relative overflow-hidden cursor-pointer flex flex-col justify-center items-center"
           style={{
             transformOrigin: "bottom right",
             borderStyle: "solid",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
           }}
           initial={{
             width: 36,
             height: 36,
             borderRadius: 18,
             backgroundColor: "rgba(255, 255, 255, 0.03)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
             borderColor: "rgba(255, 255, 255, 0.08)",
             borderWidth: 1,
             boxShadow: "0 0 0 rgba(0,0,0,0)",
