@@ -26,7 +26,10 @@ export const fallbackProjects: Project[] = [
     images: [
       "/img/IMG-20260522-WA0004.jpg",
       "/img/IMG-20260522-WA0005.jpg",
-      "/img/IMG-20260522-WA0015.jpg"
+      "/img/IMG-20260522-WA0015.jpg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM (1).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM (2).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM (3).jpeg"
     ]
   },
   {
@@ -41,7 +44,10 @@ export const fallbackProjects: Project[] = [
       "/img/IMG-20260522-WA0013.jpg",
       "/img/IMG-20260522-WA0017.jpg",
       "/img/IMG-20260522-WA0011.jpg",
-      "/img/IMG-20260522-WA0012.jpg"
+      "/img/IMG-20260522-WA0012.jpg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM (4).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM (5).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM (6).jpeg"
     ]
   },
   {
@@ -53,12 +59,16 @@ export const fallbackProjects: Project[] = [
     images: [
       "/img/IMG-20260522-WA0007.jpg",
       "/img/IMG-20260522-WA0009.jpg",
-      "/img/IMG-20260522-WA0010.jpg"
+      "/img/IMG-20260522-WA0010.jpg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.22 AM.jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM (1).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM (2).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM (3).jpeg"
     ]
   },
   {
     _id: "4",
-    title: "Career Interests",
+    title: "Supply Chain & Inventory",
     description:
       "Focusing on inventory management, asset tracking, scheduling systems, and data-driven supply chain forecasting with advanced Microsoft Excel modeling.",
     websiteUrl: "https://www.linkedin.com/in/uchechukwu-ogbuaku-1a6145306/",
@@ -87,7 +97,11 @@ export const fallbackProjects: Project[] = [
       "/img/IMG-20260522-WA0006.jpg",
       "/img/IMG-20260522-WA0016.jpg",
       "/img/IMG-20260522-WA0018.jpg",
-      "/img/IMG-20260522-WA0014.jpg"
+      "/img/IMG-20260522-WA0014.jpg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM (4).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM (5).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM (6).jpeg",
+      "/img/WhatsApp Image 2026-06-27 at 12.36.23 AM.jpeg"
     ]
   },
 ];

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Database, Settings, Workflow, Users, GraduationCap, Award, Volume2, Home, Megaphone } from "lucide-react";
+import { Database, Settings, Workflow, Users, GraduationCap, Award, Volume2, Home, Megaphone, Package } from "lucide-react";
 
 export default function About() {
   const containerVariants = {
@@ -65,13 +65,13 @@ export default function About() {
           <p className="text-sm text-white/60">Advanced Excel (Pivot Tables, Forecasting), Data Visualization, Business Statistics</p>
         </motion.div>
 
-        {/* Skills: Logistics */}
+        {/* Skills: Supply Chain */}
         <motion.div variants={itemVariants} className="col-span-1 border border-white/10 p-6 rounded-3xl bg-neutral-950/60 backdrop-blur-sm flex flex-col items-start hover:bg-neutral-900/80 transition-colors min-h-[180px] md:min-h-0">
           <div className="p-3 bg-green-500/10 rounded-2xl mb-auto">
-            <Settings className="text-green-400" size={24} />
+            <Package className="text-green-400" size={24} />
           </div>
-          <h3 className="text-lg font-bold mt-4 mb-2">Logistics</h3>
-          <p className="text-sm text-white/60">Inventory Management, Asset Tracking, Scheduling Systems, Resource Allocation</p>
+          <h3 className="text-lg font-bold mt-4 mb-2">Supply Chain & Inventory</h3>
+          <p className="text-sm text-white/60">Inventory Management, Asset Tracking, Scheduling Systems, Resource Allocation, Operations Planning</p>
         </motion.div>
 
         {/* Skills: Operations */}
