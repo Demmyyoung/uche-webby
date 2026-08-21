@@ -148,15 +148,22 @@ export default function Work() {
               key={project._id}
               className="group block py-8 md:py-12 cursor-pointer border-b border-outline-variant/30 last:border-0" 
               onMouseEnter={() => setActiveImage(project._id)}
+              onClick={() => {
+                if (isActive) {
+                  if (project.websiteUrl) {
+                    window.open(project.websiteUrl, "_blank");
+                  } else {
+                    setActiveImage(null);
+                  }
+                } else {
+                  setActiveImage(project._id);
+                }
+              }}
             >
               <div className="flex items-start">
-                <a 
-                  href={project.websiteUrl || "#"}
-                  target={project.websiteUrl ? "_blank" : "_self"}
-                  className="font-display project-title font-bold text-primary hover:text-secondary transition-colors duration-300 flex-1"
-                >
+                <div className="font-display project-title font-bold text-primary group-hover:text-secondary transition-colors duration-300 flex-1">
                   {project.title}
-                </a>
+                </div>
                 {project.year && (
                   <span className="font-sans text-label-caps text-secondary ml-4 mt-6 hidden md:block">
                     {project.year}
@@ -172,9 +179,64 @@ export default function Work() {
                 transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 className="overflow-hidden"
               >
-                <p className="font-sans text-body-lg text-on-surface-variant max-w-xl mt-8 md:mt-10 pb-4 leading-relaxed">
+                {/* Mobile Inline Image Stack */}
+                {getImageUrls(project).length > 0 && (
+                  <div 
+                    className="block md:hidden w-full h-[280px] mt-8 mb-4 relative flex items-center justify-center"
+                    onClick={(e) => {
+                      e.stopPropagation(); // prevent row click
+                      handleShuffle(project._id);
+                    }}
+                  >
+                    {getImageUrls(project).map((url, i, arr) => {
+                      const N = arr.length;
+                      const offset = shuffleOffsets[project._id] || 0;
+                      let relativeIndex = (i - offset) % N;
+                      if (relativeIndex < 0) relativeIndex += N;
+
+                      const rotations = [0, 6, -4, 8, -6];
+                      const xOffsets = [0, 15, -10, 20, -15]; // Tighter spread for mobile
+                      const yOffsets = [0, -10, 5, -15, -5];
+                      
+                      const isSingle = N === 1;
+                      const rotate = isSingle ? 0 : rotations[relativeIndex % rotations.length];
+                      const x = isSingle ? 0 : xOffsets[relativeIndex % xOffsets.length];
+                      const y = isSingle ? 0 : yOffsets[relativeIndex % yOffsets.length];
+                      const scale = isSingle ? 1 : 1 - (relativeIndex * 0.05);
+                      const zIndex = N - relativeIndex;
+                      const opacity = isSingle ? 1 : 1 - (relativeIndex * 0.15);
+
+                      return (
+                        <img 
+                          key={i}
+                          src={url}
+                          alt={`${project.title} ${i}`}
+                          className="absolute max-w-[85%] max-h-full object-contain rounded-xl shadow-xl border border-outline-variant/10 transition-all duration-700 ease-[0.16,1,0.3,1]"
+                          style={{
+                             transform: `translate(${x}px, ${y}px) rotate(${rotate}deg) scale(${scale})`,
+                             zIndex: zIndex,
+                             opacity: opacity
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
+                
+                <p className="font-sans text-body-lg text-on-surface-variant max-w-xl mt-4 md:mt-10 pb-4 leading-relaxed">
                   {project.description}
                 </p>
+                {project.websiteUrl && (
+                   <a 
+                     href={project.websiteUrl} 
+                     target="_blank" 
+                     rel="noreferrer"
+                     onClick={(e) => e.stopPropagation()}
+                     className="inline-block mt-2 mb-4 font-sans text-[12px] font-bold tracking-[0.15em] text-primary hover:text-secondary uppercase border-b border-primary/30 hover:border-secondary transition-colors pb-1"
+                   >
+                     View Project ↗
+                   </a>
+                )}
               </motion.div>
             </div>
           );
