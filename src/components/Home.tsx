@@ -9,24 +9,31 @@ const slideVariants = {
 };
 
 // Reusable squeezing box component moved OUTSIDE so it doesn't unmount on every render!
+// NOTE: We animate `flexGrow` only — NOT the `flex` shorthand.
+// `flex: N` expands to `flex-basis: 0%` as an inline style which overrides the Tailwind
+// `h-[Xpx]` class and collapses boxes to 0 height on mobile (column flex, no parent height).
+// Animating `flexGrow` alone keeps flex-basis at `auto` so the height class works.
 const SqueezeBox = ({ flexGrow, imageSrc, imageKey }: { flexGrow: number, imageSrc: string, imageKey: number }) => (
   <motion.div 
     layout
-    animate={{ flex: flexGrow }}
+    animate={{ flexGrow }}
     transition={{ type: "spring", stiffness: 80, damping: 20, mass: 1.2 }}
-    className="relative h-[250px] md:h-[400px] w-full md:w-auto overflow-hidden border-b md:border-b-0 md:border-r border-outline-variant/50 last:border-0 bg-surface-variant group flex-shrink-0"
+    className="relative aspect-[4/3] md:aspect-auto md:h-[400px] w-full md:w-auto overflow-hidden border-b md:border-b-0 md:border-r border-outline-variant/50 last:border-0 bg-surface-variant group"
   >
     <AnimatePresence initial={false}>
-      <motion.img 
-        key={imageKey}
-        src={imageSrc}
-        variants={slideVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className="absolute inset-0 w-full h-full object-cover"
-        alt="Portfolio showcase"
-      />
+      {imageSrc && (
+        <motion.img 
+          key={imageKey}
+          src={imageSrc}
+          variants={slideVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          className="absolute inset-0 w-full h-full object-cover"
+          alt="Portfolio showcase"
+          loading="eager"
+        />
+      )}
     </AnimatePresence>
     <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-500 z-10 pointer-events-none" />
   </motion.div>
@@ -116,18 +123,18 @@ export default function Home() {
       >
         <div className="w-full border-t border-b border-outline-variant/50 flex flex-col shadow-2xl shadow-black/5">
           
-          {/* Row 1 */}
+          {/* Row 1 — desktop: squeeze side by side, mobile: stack vertically */}
           <div className="w-full flex flex-col md:flex-row border-b border-outline-variant/50">
-            <SqueezeBox flexGrow={flexRow1[0]} imageSrc={set1[indices[0]]} imageKey={indices[0]} />
-            <SqueezeBox flexGrow={flexRow1[1]} imageSrc={set2[indices[1]]} imageKey={indices[1] * 10} />
-            <SqueezeBox flexGrow={flexRow1[2]} imageSrc={set3[indices[2]]} imageKey={indices[2] * 100} />
+            {set1[indices[0]] && <SqueezeBox flexGrow={flexRow1[0]} imageSrc={set1[indices[0]]} imageKey={indices[0]} />}
+            {set2[indices[1]] && <SqueezeBox flexGrow={flexRow1[1]} imageSrc={set2[indices[1]]} imageKey={indices[1] * 10} />}
+            {set3[indices[2]] && <SqueezeBox flexGrow={flexRow1[2]} imageSrc={set3[indices[2]]} imageKey={indices[2] * 100} />}
           </div>
 
           {/* Row 2 */}
           <div className="w-full flex flex-col md:flex-row">
-            <SqueezeBox flexGrow={flexRow2[0]} imageSrc={set4[indices[3]]} imageKey={indices[3] * 1000} />
-            <SqueezeBox flexGrow={flexRow2[1]} imageSrc={set5[indices[4]]} imageKey={indices[4] * 10000} />
-            <SqueezeBox flexGrow={flexRow2[2]} imageSrc={set6[indices[5]]} imageKey={indices[5] * 100000} />
+            {set4[indices[3]] && <SqueezeBox flexGrow={flexRow2[0]} imageSrc={set4[indices[3]]} imageKey={indices[3] * 1000} />}
+            {set5[indices[4]] && <SqueezeBox flexGrow={flexRow2[1]} imageSrc={set5[indices[4]]} imageKey={indices[4] * 10000} />}
+            {set6[indices[5]] && <SqueezeBox flexGrow={flexRow2[2]} imageSrc={set6[indices[5]]} imageKey={indices[5] * 100000} />}
           </div>
 
         </div>
